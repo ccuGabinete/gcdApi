@@ -1,5 +1,6 @@
 var GoogleSpreadsheet = require("google-spreadsheet");
 const moment = require("../time");
+const base64 = require('js-base64').Base64;
 const { promisify } = require("util");
 const credentials = require("../credentials.json");
 const spreedsheetId = "1KsiOkAmO58K2rXhRhC4n7OhX7muj32cvoNcd3ZMh7Rk";
@@ -44,6 +45,7 @@ module.exports.salvar = async (req, res, next) => {
     */
 
   req.body.data = moment.time();
+  req.body.lacre = base64.encode(req.body.lacre);
 
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0];
@@ -82,11 +84,12 @@ module.exports.buscarLacre = async (req, res, next) => {
   const folhaDeDados = info.worksheets[0];
   const linhas = await promisify(folhaDeDados.getRows)({});
 
-  linhas.forEach((linha, idlinha) => {
-    var aux = linha.lacre.split(",");
+  linhas.forEach((line, idlinha) => {
+    let linha = base64.decode(line.lacre);
+    let aux = linha.split(",");
     aux.forEach((lacre, idcoluna) => {
       let obj = {};
-      obj["data"] = linha.data;
+      obj["data"] = line.data;
       obj["linha"] = idlinha;
       obj["coluna"] = idcoluna;
       obj["id"] = lacre.substring(0, 8);
@@ -134,8 +137,9 @@ module.exports.atualizar = async (req, res, next) => {
   const folhaDeDados = info.worksheets[0];
   const celLinhas = await promisify(folhaDeDados.getCells)({});
   const linhas = await promisify(folhaDeDados.getRows)({});
-  var response = "";
+
   linhas.forEach(linha => {
+    linha.lacre = base64.decode(linha.lacre);
     arrLinhas.push(linha.lacre);
   });
 
@@ -149,9 +153,12 @@ module.exports.atualizar = async (req, res, next) => {
 
   let celula = celLinhas.filter(filterId);
 
-  let arrLacres = celula[0].value.split(",");
+  let arrLacres = base64.decode(celula[0].value).split(",");
+
+  console.log(arrLacres);
 
   if (req.body.pos) {
+      console.log('linha 161' + arrLacres[coluna])
     let aux = arrLacres[coluna].replace(
       arrLacres[coluna].substring(9, 13),
       req.body.pos
@@ -183,7 +190,7 @@ module.exports.atualizar = async (req, res, next) => {
 
     arrLacres[coluna] = aux;
   }
-  celula[0].value = arrLacres.toString();
+  celula[0].value = base64.encode(arrLacres.toString());
   celula[0].save();
   folhaDeDados.bulkUpdateCells(celLinhas);
 
