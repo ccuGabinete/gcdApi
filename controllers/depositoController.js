@@ -11,7 +11,8 @@ const status = [
   "descartado",
   "doado",
   "leiloado",
-  "impedido"
+  "impedido",
+  "sem entrada"
 ];
 
 var sendJsonResponse = function(res, status, content) {
