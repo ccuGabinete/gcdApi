@@ -13,6 +13,7 @@ router.post('/notificado', scca.getScca);
 router.post('/gcd/buscarLacre', mid.asyncMiddleware(gcd.buscarLacre))
 router.post('/gcd/salvar', mid.asyncMiddleware(gcd.salvar))
 router.post('/gcd/atualizar', mid.asyncMiddleware(gcd.atualizar))
+router.post('/gcd/buscarPosicao', mid.asyncMiddleware(gcd.buscarPos))
 router.post('/gcd/autos/buscarAuto', mid.asyncMiddleware(aa.buscarAuto))
 router.post('/gcd/autos/salvar', mid.asyncMiddleware(aa.salvar))
 

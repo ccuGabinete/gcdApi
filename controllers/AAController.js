@@ -95,3 +95,4 @@ module.exports.buscarAuto = async (req, res, next) => {
  
   res.json(obj);
 }
+

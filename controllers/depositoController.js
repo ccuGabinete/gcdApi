@@ -116,6 +116,7 @@ module.exports.buscarLacre = async (req, res, next) => {
   }
 };
 
+
 module.exports.atualizar = async (req, res, next) => {
   /*Esse método observa se houve atualização de:
         pos: posição do lacre
@@ -191,3 +192,64 @@ module.exports.atualizar = async (req, res, next) => {
   //   sendJsonResponse(res, 200, {atualizado: true});
   sendJsonResponse(res, 200, batchId);
 };
+
+module.exports.buscarPos = async (req, res, next) => {
+  /*
+        Esse método requer a posição do auto
+        req.body: {
+            pos: ''
+        }
+
+        e retorna:
+        index: {
+            "data": "",
+            "linha": 0,
+            "coluna": 0,
+            "id": "",
+            "pos": "",
+            "processo": "",
+            "status": "",
+            "atualizado": ""
+        }
+    */
+
+  var arr = [];
+  var pos = req.body.pos;
+
+  const info = await this.acessarPlanilha();
+  const folhaDeDados = info.worksheets[0];
+  const linhas = await promisify(folhaDeDados.getRows)({});
+
+  linhas.forEach((linha, idlinha) => {
+    var aux = linha.lacre.split(",");
+    aux.forEach((lacre, idcoluna) => {
+      let obj = {};
+      obj["data"] = linha.data;
+      obj["linha"] = idlinha;
+      obj["coluna"] = idcoluna;
+      obj["id"] = lacre.substring(0, 8);
+      obj["pos"] = lacre.substring(9, 13);
+      obj["processo"] = lacre.substring(14, 28);
+      if (obj["processo"] === "00000000000000") {
+        obj["processo"] = "Sem processo";
+      }
+      obj["status"] = lacre.substring(29, 31);
+      obj["status"] = status[parseInt(obj["status"])];
+      obj["atualizado"] = lacre.substring(32, 40);
+      arr.push(obj);
+    });
+  });
+
+  var filter = value => {
+    return value.pos === pos;
+  };
+
+  var index = arr.filter(filter);
+
+  if (index.length === 0) {
+    sendJsonResponse(res, 200, [{ response: false }]);
+  } else {
+    sendJsonResponse(res, 200, index);
+  }
+};
+
