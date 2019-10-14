@@ -4,16 +4,7 @@ const { promisify } = require("util");
 const credentials = require("../credentials.json");
 const spreedsheetId = "1KsiOkAmO58K2rXhRhC4n7OhX7muj32cvoNcd3ZMh7Rk";
 const doc = new GoogleSpreadsheet(spreedsheetId);
-const status = [
-  "entrada",
-  "recebido",
-  "devolvido",
-  "descartado",
-  "doado",
-  "leiloado",
-  "impedido",
-  "sem entrada"
-];
+
 
 var sendJsonResponse = function(res, status, content) {
   res.status(status);
@@ -97,7 +88,6 @@ module.exports.buscarLacre = async (req, res, next) => {
         obj["processo"] = "Sem processo";
       }
       obj["status"] = lacre.substring(29, 31);
-      obj["status"] = status[parseInt(obj["status"])];
       obj["atualizado"] = lacre.substring(32, 40);
       arr.push(obj);
     });
