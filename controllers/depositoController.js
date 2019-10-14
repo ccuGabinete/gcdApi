@@ -82,13 +82,13 @@ module.exports.buscarLacre = async (req, res, next) => {
       obj["linha"] = idlinha;
       obj["coluna"] = idcoluna;
       obj["id"] = lacre.substring(0, 8);
-      obj["pos"] = lacre.substring(9, 13);
-      obj["processo"] = lacre.substring(14, 28);
+      obj["processo"] = lacre.substring(9, 23);
       if (obj["processo"] === "00000000000000") {
         obj["processo"] = "Sem processo";
       }
-      obj["status"] = lacre.substring(29, 31);
-      obj["atualizado"] = lacre.substring(32, 40);
+      obj["status"] = lacre.substring(24, 26);
+      obj["atualizado"] = lacre.substring(27, 35);
+      obj["pos"] = linha.pos;
       arr.push(obj);
     });
   });
@@ -202,44 +202,19 @@ module.exports.buscarPos = async (req, res, next) => {
             "atualizado": ""
         }
     */
-
-  var arr = [];
   var pos = req.body.pos;
 
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0];
-  const linhas = await promisify(folhaDeDados.getRows)({});
-
-  linhas.forEach((linha, idlinha) => {
-    var aux = linha.lacre.split(",");
-    aux.forEach((lacre, idcoluna) => {
-      let obj = {};
-      obj["data"] = linha.data;
-      obj["linha"] = idlinha;
-      obj["coluna"] = idcoluna;
-      obj["id"] = lacre.substring(0, 8);
-      obj["pos"] = lacre.substring(9, 13);
-      obj["processo"] = lacre.substring(14, 28);
-      if (obj["processo"] === "00000000000000") {
-        obj["processo"] = "Sem processo";
-      }
-      obj["status"] = lacre.substring(29, 31);
-      obj["status"] = status[parseInt(obj["status"])];
-      obj["atualizado"] = lacre.substring(32, 40);
-      arr.push(obj);
-    });
+  const linhas = await promisify(folhaDeDados.getRows)({
+    query: 'pos = ' + pos 
   });
 
-  var filter = value => {
-    return value.pos === pos;
-  };
-
-  var index = arr.filter(filter);
-
-  if (index.length === 0) {
+  
+  if (linhas.length === 0) {
     sendJsonResponse(res, 200, [{ response: false }]);
   } else {
-    sendJsonResponse(res, 200, index);
+    sendJsonResponse(res, 200, linhas);
   }
 };
 
