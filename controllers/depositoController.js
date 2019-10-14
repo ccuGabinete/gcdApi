@@ -6,7 +6,7 @@ const spreedsheetId = "1KsiOkAmO58K2rXhRhC4n7OhX7muj32cvoNcd3ZMh7Rk";
 const doc = new GoogleSpreadsheet(spreedsheetId);
 
 
-var sendJsonResponse = function(res, status, content) {
+var sendJsonResponse = function (res, status, content) {
   res.status(status);
   res.json(content);
 };
@@ -67,42 +67,14 @@ module.exports.buscarLacre = async (req, res, next) => {
         }
     */
 
-  var arr = [];
-  var numero = req.body.numero;
-
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0];
   const linhas = await promisify(folhaDeDados.getRows)({});
 
-  linhas.forEach((linha, idlinha) => {
-    var aux = linha.lacre.split(",");
-    aux.forEach((lacre, idcoluna) => {
-      let obj = {};
-      obj["data"] = linha.data;
-      obj["linha"] = idlinha;
-      obj["coluna"] = idcoluna;
-      obj["id"] = lacre.substring(0, 8);
-      obj["processo"] = lacre.substring(9, 23);
-      if (obj["processo"] === "00000000000000") {
-        obj["processo"] = "Sem processo";
-      }
-      obj["status"] = lacre.substring(24, 26);
-      obj["atualizado"] = lacre.substring(27, 35);
-      obj["pos"] = linha.pos;
-      arr.push(obj);
-    });
-  });
-
-  var filter = value => {
-    return value.id === numero;
-  };
-
-  var index = arr.filter(filter);
-
-  if (index.length === 0) {
+  if (linhas.length === 0) {
     sendJsonResponse(res, 200, [{ response: false }]);
   } else {
-    sendJsonResponse(res, 200, index);
+    sendJsonResponse(res, 200, linhas);
   }
 };
 
@@ -202,7 +174,7 @@ module.exports.buscarPos = async (req, res, next) => {
             "atualizado": ""
         }
     */
-   var arr = [];
+  var arr = [];
   var pos = req.body.pos;
 
   const info = await this.acessarPlanilha();
@@ -219,12 +191,8 @@ module.exports.buscarPos = async (req, res, next) => {
       obj["linha"] = idlinha;
       obj["coluna"] = idcoluna;
       obj["id"] = lacre.substring(0, 8);
-      obj["processo"] = lacre.substring(9, 23);
-      if (obj["processo"] === "00000000000000") {
-        obj["processo"] = "Sem processo";
-      }
-      obj["status"] = lacre.substring(24, 26);
-      obj["atualizado"] = lacre.substring(27, 35);
+      obj["status"] = lacre.substring(9, 11);
+      obj["atualizado"] = lacre.substring(12, 20);
       obj["pos"] = linha.pos;
       arr.push(obj);
     });
