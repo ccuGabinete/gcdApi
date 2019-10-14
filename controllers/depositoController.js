@@ -202,19 +202,38 @@ module.exports.buscarPos = async (req, res, next) => {
             "atualizado": ""
         }
     */
+   var arr = [];
   var pos = req.body.pos;
 
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0];
   const linhas = await promisify(folhaDeDados.getRows)({
-    query: 'pos = ' + pos 
+    query: 'pos = ' + pos
   });
 
-  
-  if (linhas.length === 0) {
+  linhas.forEach((linha, idlinha) => {
+    var aux = linha.lacre.split(",");
+    aux.forEach((lacre, idcoluna) => {
+      let obj = {};
+      obj["data"] = linha.data;
+      obj["linha"] = idlinha;
+      obj["coluna"] = idcoluna;
+      obj["id"] = lacre.substring(0, 8);
+      obj["processo"] = lacre.substring(9, 23);
+      if (obj["processo"] === "00000000000000") {
+        obj["processo"] = "Sem processo";
+      }
+      obj["status"] = lacre.substring(24, 26);
+      obj["atualizado"] = lacre.substring(27, 35);
+      obj["pos"] = linha.pos;
+      arr.push(obj);
+    });
+  });
+
+  if (arr.length === 0) {
     sendJsonResponse(res, 200, [{ response: false }]);
   } else {
-    sendJsonResponse(res, 200, linhas);
+    sendJsonResponse(res, 200, arr);
   }
 };
 
