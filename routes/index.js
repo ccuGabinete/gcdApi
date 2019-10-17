@@ -4,6 +4,7 @@ const acesso = require('../controllers/acessoController');
 const scca = require('../controllers/sccaController');
 const gcd = require('../controllers/depositoController');
 const aa = require('../controllers/AAController');
+const atd = require('../controllers/atendimentoController');
 var mid = require('../asyncMiddleware');
 
 router.post('/acesso/validar', mid.asyncMiddleware(acesso.validarSenha))
@@ -17,7 +18,7 @@ router.post('/gcd/atualizaCartorio', mid.asyncMiddleware(gcd.atualizaCartorio))
 router.post('/gcd/atualizaPlantao', mid.asyncMiddleware(gcd.atualizaPlantao))
 router.post('/gcd/autos/buscarAuto', mid.asyncMiddleware(aa.buscarAuto))
 router.post('/gcd/autos/salvar', mid.asyncMiddleware(aa.salvar))
-router.post('/gcd/atendimento/salvar', mid.asyncMiddleware(aa.salvar))
+router.post('/gcd/atendimento/salvar', mid.asyncMiddleware(atd.salvar))
 
 
 
