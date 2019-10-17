@@ -79,37 +79,50 @@ module.exports.buscarLacre = async (req, res, next) => {
 };
 
 
-module.exports.atualizar = async (req, res, next) => {
-  /*Esse método atualiza o lacre
+module.exports.atualizaCartorio = async (req, res, next) => {
+  /*Esse método atualiza o lacre e o processo;
 
         req.body: {
-            pos: '',
-            processo: '',
-            status: '',
-            atualizado: ''
+            linha: string,
+            lacre: string,
+            processo: string
         }
     */
   var linha = parseInt(req.body.linha);
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0];
   const celLinhas = await promisify(folhaDeDados.getCells)({});
-  
   const pos_lacre = (linha * 6) + 5;
-  console.log(linha);
-  console.log(pos_lacre);
   const pos_processo = (linha * 6) + 4;
-
-   
-
-  celLinhas[pos_processo].value = 'processo atualizado';
-  celLinhas[pos_lacre].value = 'lacre atualizado';
-
+  celLinhas[pos_processo].value = req.body.processo;
+  celLinhas[pos_lacre].value = req.body.lacre;
   celLinhas[0].save();
   folhaDeDados.bulkUpdateCells(celLinhas);
-  
+  sendJsonResponse(res, 200, { atualizado: true });
+};
 
-  sendJsonResponse(res, 200, {atualizado: true});
-  // sendJsonResponse(res, 200, celLinhas[pos_lacre]);
+module.exports.atualizaPlantao = async (req, res, next) => {
+  /*Esse método atualiza o auto e sua posicao
+
+        req.body: {
+            linha: string,
+            auto: string,
+            pos: string
+        }
+    */
+  var linha = parseInt(req.body.linha);
+  const info = await this.acessarPlanilha();
+  const folhaDeDados = info.worksheets[0];
+  const celLinhas = await promisify(folhaDeDados.getCells)({});
+  const pos_auto = (linha * 6) + 2;
+  const pos_pos = (linha * 6) + 1;
+  celLinhas[pos_auto].value = req.body.auto;
+  celLinhas[pos_pos].value = req.body.pos;
+  
+  celLinhas[0].save();
+  folhaDeDados.bulkUpdateCells(celLinhas);
+
+  sendJsonResponse(res, 200, { atualizado: true });
 };
 
 module.exports.buscarPos = async (req, res, next) => {
