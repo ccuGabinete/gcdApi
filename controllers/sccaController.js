@@ -20,7 +20,6 @@ module.exports.getScca = (req, res, next) => {
         "nomeaux": "",
         "cpfaux": ""
     };
-    console.log(req.body);
     request.get({
         uri: URL_OF_WEBSITE + req.body.matricula,
         encoding: null

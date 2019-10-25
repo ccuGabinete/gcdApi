@@ -47,7 +47,6 @@ module.exports.salvar = async (req, res, next) => {
   req.body.data = moment.time();
 
   const info = await this.acessarPlanilha();
-  console.log(info);
   const folhaDeDados = info.worksheets[0];
   const response = await promisify(folhaDeDados.addRow)(req.body);
   if (response) {

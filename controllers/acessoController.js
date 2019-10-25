@@ -87,16 +87,12 @@ module.exports.atualizarSenha = async (req, res, next) => {
         let linhaEncontrada = celula.batchId.substring(0, 2)
 
         let batchId = linhaEncontrada + colunaSenha;
-        console.log(batchId);
-
 
         let filterSenha = (celula) => {
             return celula.batchId == batchId;
         }
 
-        let celulaLogin = linhas.filter(filterSenha)[0]
-        console.log(celulaLogin);
-
+        let celulaLogin = linhas.filter(filterSenha)[0];
         celulaLogin.value = this.senha;
         celulaLogin.save();
         folhaDeDados.bulkUpdateCells(linhas);

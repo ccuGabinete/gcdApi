@@ -24,13 +24,7 @@ module.exports.salvar = async (req, res, next) => {
   /*
         Esse método requer o um objeto atendimento
         req.body: {
-            data: string;
-            motivo: string;
-            cpf: string;
-            matricula: string;
-            nome: string;
-            processo: string;
-            agrespatendimento: string;
+            processo: string
         }
 
         e retorna:
@@ -42,7 +36,6 @@ module.exports.salvar = async (req, res, next) => {
   req.body.data = moment.time();
 
   const info = await this.acessarPlanilha();
-  console.log(info);
   const folhaDeDados = info.worksheets[0];
   const response = await promisify(folhaDeDados.addRow)(req.body);
   if (response) {
@@ -51,4 +44,20 @@ module.exports.salvar = async (req, res, next) => {
     sendJsonResponse(res, 200, { salvo: false });
   }
 };
+
+module.exports.buscar = async (req, res, next) => {
+  const processo = req.body.processo;
+  const info = await this.acessarPlanilha();
+  const folhaDeDados = info.worksheets[0]
+  const linhas = await promisify(folhaDeDados.getRows)({
+      query: 'processo = ' + processo
+  })
+
+  if(linhas.length !== 'undefined' || linhas.length > 0){
+    res.json(linhas[0]);;
+  }else{
+    res.json([]);
+  }
+  
+}
 

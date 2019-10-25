@@ -57,7 +57,6 @@ module.exports.salvar = async (req, res, next) => {
 
 module.exports.buscar = async (req, res, next) => {
   const processo = req.body.processo;
-  console.log(req.body);
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0]
   const linhas = await promisify(folhaDeDados.getRows)({
@@ -85,5 +84,8 @@ module.exports.atualizar = async (req, res, next) => {
   folhaDeDados.bulkUpdateCells(celLinhas);
   sendJsonResponse(res, 200, { atualizado: true });
 };
+
+
+
 
 
