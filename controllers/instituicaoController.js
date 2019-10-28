@@ -78,7 +78,7 @@ module.exports.atualizar = async (req, res, next) => {
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0];
   const celLinhas = await promisify(folhaDeDados.getCells)({});
-  const pos_codigo = ((linha) * 15) + 15;
+  const pos_codigo = ((linha) * 16) + 16;
   celLinhas[pos_codigo].value = req.body.codigo;
   celLinhas[0].save();
   folhaDeDados.bulkUpdateCells(celLinhas);
