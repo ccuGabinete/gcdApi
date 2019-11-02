@@ -6,6 +6,7 @@ const gcd = require('../controllers/depositoController');
 const aa = require('../controllers/AAController');
 const atd = require('../controllers/atendimentoController');
 const inst = require('../controllers/instituicaoController');
+const email = require('../controllers/emailController');
 var mid = require('../asyncMiddleware');
 
 router.post('/acesso/validar', mid.asyncMiddleware(acesso.validarSenha))
@@ -24,9 +25,7 @@ router.post('/gcd/atendimento/buscar', mid.asyncMiddleware(atd.buscar))
 router.post('/gcd/instituicao/salvar', mid.asyncMiddleware(inst.salvar))
 router.post('/gcd/instituicao/buscar', mid.asyncMiddleware(inst.buscar))
 router.post('/gcd/instituicao/atualizar', mid.asyncMiddleware(inst.atualizar))
-
-
-
+router.get('/gcd/email/enviar', mid.asyncMiddleware(email.enviar))
 
 module.exports = router
 
