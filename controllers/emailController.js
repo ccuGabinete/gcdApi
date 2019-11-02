@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+const nodeMailer = require('nodemailer');
 const inicio = 43639;
 const fim = 65536;
 const reg = new RegExp(/[a-z]/i);
@@ -37,33 +37,30 @@ module.exports.enviar = async (req, res, next) => {
 
     const codigo = geraCodigo();
 
-    async function main() {
-        let testAccount = await nodemailer.createTestAccount();
-        let transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
-            auth: {
-                user: 'ccugabinete@gmail.com',
-                pass: 'Ni244265@'
-            }
-        });
-
-        let info = await transporter.sendMail({
-            from: '"Gabinete" <ccugabinete@gmail.com>',
-            to: 'ccugabinete@gmail.com',
-            subject: 'Codigo ✔',
-            text: codigo
-        });
-
-    }
-
-    main()
-    .then(data => {
-        sendJsonResponse(res, 200, {codigo: codigo})
-    })
-    .catch(error => {
-        sendJsonResponse(res, 500, error);
+    let transporter = nodeMailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'ccugabinete@gmail.com',
+            pass: 'Ni244265@'
+        }
     });
 
-};
+    let mailOptions = {
+        // should be replaced with real recipient's account
+        to: 'ccugabinete@gmail.com',
+        subject: 'Codigo',
+        body: codigo
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+    });
+
+    res.send(codigo);
+    res.end();
+}
+  
