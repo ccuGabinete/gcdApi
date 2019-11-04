@@ -9,7 +9,6 @@ const atd = require('../controllers/atendimentoController');
 const inst = require('../controllers/instituicaoController');
 const email = require('../controllers/emailController');
 var mid = require('../asyncMiddleware');
-
 router.post('/acesso/validar', mid.asyncMiddleware(acesso.validarSenha))
 router.post('/acesso/atualizarSenha', mid.asyncMiddleware(acesso.atualizarSenha))
 router.post('/acesso/salvar', mid.asyncMiddleware(acesso.salvar))
