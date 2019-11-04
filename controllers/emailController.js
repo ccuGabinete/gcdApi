@@ -37,30 +37,37 @@ module.exports.enviar = async (req, res, next) => {
 
     const codigo = geraCodigo();
 
-    let transporter = nodeMailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-            user: 'ccugabinete@gmail.com',
-            pass: 'Ni244265@'
-        }
-    });
-
-    let mailOptions = {
-        // should be replaced with real recipient's account
-        to: 'ccugabinete@gmail.com',
-        subject: 'Codigo',
-        body: codigo
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-    });
-
+    var nodemailer = require('nodemailer');
+var mg = require('nodemailer-mailgun-transport');
+ 
+// This is your API key that you retrieve from www.mailgun.com/cp (free up to 10K monthly emails)
+var auth = {
+  auth: {
+    api_key: '73b76da384b3f2e1bd945578787f58e8-f696beb4-93d9694c',
+    domain: 'sandbox59ea57ad3bbd462987a15a45ac23b396.mailgun.org'
+  }
+}
+ 
+var nodemailerMailgun = nodemailer.createTransport(mg(auth));
+ 
+nodemailerMailgun.sendMail({
+  from: 'ccugabinete@gmail.com',
+  to: 'ccugabinete@gmail.com',
+  subject: 'Hey you, awesome!',
+  'h:Reply-To': 'reply2this@company.com',
+  //You can use "html:" to send HTML email content. It's magic!
+  html: '<b>Wow Big powerful letters</b>',
+  //You can use "text:" to send plain-text content. It's oldschool!
+  text: 'Mailgun rocks, pow pow!'
+}, function (err, info) {
+  if (err) {
+    console.log('Error: ' + err);
+  }
+  else {
     res.send(codigo);
     res.end();
+  }
+});
+    
 }
   
