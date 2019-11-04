@@ -44,7 +44,7 @@ module.exports.enviar = async (req, res, next) => {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
         to: 'ccugabinete@gmail.com',
-        from: 'ccugabinete@gmail.com',
+        from: 'app148641805@heroku.com',
         subject: 'Código',
         text: codigo,
         html: '<strong>' + codigo + '</strong>'
