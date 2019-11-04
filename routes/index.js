@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+require('dotenv').config({path: './.env'});
 const acesso = require('../controllers/acessoController');
 const scca = require('../controllers/sccaController');
 const gcd = require('../controllers/depositoController');

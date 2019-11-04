@@ -1,8 +1,11 @@
+require('dotenv').config({path: './.env'});
 const nodeMailer = require('nodemailer');
 const inicio = 43639;
 const fim = 65536;
 const reg = new RegExp(/[a-z]/i);
 const max = 4;
+const go = console.log;
+
 
 var sendJsonResponse = function (res, status, content) {
     res.status(status);
@@ -43,8 +46,8 @@ var mg = require('nodemailer-mailgun-transport');
 // This is your API key that you retrieve from www.mailgun.com/cp (free up to 10K monthly emails)
 var auth = {
   auth: {
-    api_key: '73b76da384b3f2e1bd945578787f58e8-f696beb4-93d9694c',
-    domain: 'sandbox59ea57ad3bbd462987a15a45ac23b396.mailgun.org'
+    api_key: process.env.API_KEY,
+    domain: process.env.DOMAIN
   }
 }
  
