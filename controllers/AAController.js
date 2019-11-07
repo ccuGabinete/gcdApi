@@ -12,7 +12,7 @@ const status = [
   "doado",
   "leiloado",
   "impedido",
-  "sem entrada"
+  "requerido"
 ];
 
 var sendJsonResponse = function (res, status, content) {
@@ -93,5 +93,21 @@ module.exports.buscarAuto = async (req, res, next) => {
   }
  
   res.json(obj);
+}
+
+module.exports.contar = async (req, res, next) => {
+  /*
+       Retorna: a quantidade de autos salvos na planilha
+    */
+
+  const info = await this.acessarPlanilha();
+  const folhaDeDados = info.worksheets[0];
+
+  const linhas = await promisify(folhaDeDados.getRows)({
+  })
+
+
+ 
+  sendJsonResponse(res, 200, {quantidade: linhas.length});
 }
 

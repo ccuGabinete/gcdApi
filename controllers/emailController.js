@@ -3,9 +3,6 @@ const inicio = 43639;
 const fim = 65536;
 const reg = new RegExp(/[a-z]/i);
 const max = 4;
-const go = console.log;
-go('cu');
-go(process.env.SENDGRID_API_KEY);
 
 var sendJsonResponse = function (res, status, content) {
     res.status(status);
