@@ -93,7 +93,7 @@ module.exports.atualizaCartorio = async (req, res, next) => {
   const folhaDeDados = info.worksheets[0];
   const celLinhas = await promisify(folhaDeDados.getCells)({});
   const pos_lacre = (linha * 5) + 3;
-  const pos_processo = (linha * 5) + ;
+  const pos_processo = (linha * 5) + 2;
   celLinhas[pos_processo].value = req.body.processo;
   celLinhas[pos_lacre].value = req.body.lacre;
   celLinhas[0].save();
