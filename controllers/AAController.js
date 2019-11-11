@@ -76,6 +76,7 @@ module.exports.buscarAuto = async (req, res, next) => {
   let obj = {
     numero: '',
     pos: '',
+    dataapreensao: '',
     trm: []
   }
 
@@ -90,6 +91,7 @@ module.exports.buscarAuto = async (req, res, next) => {
     obj.trm = linhas[0].trm.split(';')
     obj.numero = linhas[0].numero;
     obj.pos = linhas[0].pos;
+    obj.dataapreensao = linha[0].dataapreensao;
   }
  
   res.json(obj);
