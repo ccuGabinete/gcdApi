@@ -110,7 +110,7 @@ module.exports.atualizaPlantao = async (req, res, next) => {
             pos: string
         }
     */
-   console.log(req.body.pos);
+
   var linha = parseInt(req.body.linha);
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0];
@@ -120,6 +120,29 @@ module.exports.atualizaPlantao = async (req, res, next) => {
   const pos_lacre = (linha * 5) + 4;
   celLinhas[pos_auto].value = req.body.auto;
   celLinhas[pos_pos].value = req.body.pos;
+  celLinhas[pos_lacre].value = req.body.lacre;
+  
+  celLinhas[0].save();
+  folhaDeDados.bulkUpdateCells(celLinhas);
+
+  sendJsonResponse(res, 200, { atualizado: true });
+};
+
+module.exports.atualizaLacre = async (req, res, next) => {
+  /*Esse método atualiza o auto e sua posicao
+
+        req.body: {
+            linha: string,
+            auto: string,
+            pos: string
+        }
+    */
+
+  var linha = parseInt(req.body.linha);
+  const info = await this.acessarPlanilha();
+  const folhaDeDados = info.worksheets[0];
+  const celLinhas = await promisify(folhaDeDados.getCells)({});
+  const pos_lacre = (linha * 5) + 4;
   celLinhas[pos_lacre].value = req.body.lacre;
   
   celLinhas[0].save();
