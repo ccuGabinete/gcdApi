@@ -232,7 +232,7 @@ module.exports.getLacre = async (req, res, next) => {
   if (linhas.length === 0) {
     sendJsonResponse(res, 200, [{ response: false }]);
   } else {
-    sendJsonResponse(res, 200, { response: response });
+    sendJsonResponse(res, 200, response);
   }
 };
 
