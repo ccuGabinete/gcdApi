@@ -3,6 +3,7 @@ const inicio = 43639;
 const fim = 65536;
 const reg = new RegExp(/[a-z]/i);
 const max = 4;
+const go = console.log;
 
 var sendJsonResponse = function (res, status, content) {
     res.status(status);
@@ -13,13 +14,17 @@ const geraCodigo = () => {
     let bol = false;
     let sorteado = '';
     let tamanho = 5;
+    let restodivisao = 0;
 
-    while (bol === false || tamanho !== max) {
+    while (bol === false || tamanho !== max || restodivisao !== 0) {
         sorteado = Math.floor(Math.random() * fim + inicio).toString(16);
         bol = reg.test(sorteado);
         tamanho = sorteado.length;
+        restodivisao = restodivisao = parseInt(sorteado, 16) % 5;
+        go(sorteado);
+        go(restodivisao);
     }
-    return sorteado;
+    return parseInt(sorteado, 16);
 }
 
 module.exports.enviar = async (req, res, next) => {
@@ -43,7 +48,7 @@ module.exports.enviar = async (req, res, next) => {
         to: 'ccugabinete@gmail.com',
         from: 'app148641805@heroku.com',
         subject: 'Código',
-        text: codigo,
+        text: codigo.toString(),
         html: '<strong>' + codigo + '</strong>'
     };
     sgMail.send(msg);
