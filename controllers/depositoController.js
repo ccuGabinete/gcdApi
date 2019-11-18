@@ -227,6 +227,9 @@ module.exports.getLacre = async (req, res, next) => {
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0];
   const linhas = await promisify(folhaDeDados.getRows)({});
+  linhas.forEach((a,b) => {
+    a.linha = b + 1;
+  })
   const response = linhas.filter(x => regexp.test(x.lacre) === true);
 
   if (linhas.length === 0) {
