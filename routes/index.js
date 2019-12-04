@@ -15,6 +15,7 @@ router.post('/acesso/atualizarSenha', mid.asyncMiddleware(acesso.atualizarSenha)
 router.post('/acesso/salvar', mid.asyncMiddleware(acesso.salvar))
 router.post('/notificado', scca.getScca);
 router.get('/gcd/buscarLacre', mid.asyncMiddleware(gcd.buscarLacre))
+router.post('/gcd/getLacre', mid.asyncMiddleware(gcd.getLacre))
 router.post('/gcd/buscarPosicao', mid.asyncMiddleware(gcd.buscarPos))
 router.post('/gcd/salvar', mid.asyncMiddleware(gcd.salvar))
 router.post('/gcd/atualizaCartorio', mid.asyncMiddleware(gcd.atualizaCartorio))

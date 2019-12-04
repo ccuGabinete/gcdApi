@@ -200,3 +200,42 @@ module.exports.buscarPos = async (req, res, next) => {
   }
 };
 
+module.exports.getLacre = async (req, res, next) => {
+  /*
+        Esse método requer o número do lacre
+        req.body: {
+            numero: ''
+        }
+
+        e retorna:
+        index: {
+            "data": "",
+            "linha": 0,
+            "coluna": 0,
+            "id": "",
+            "pos": "",
+            "processo": "",
+            "status": "",
+            "atualizado": ""
+        }
+    */
+
+  const regexp = new RegExp(req.body.numero);
+
+
+  const info = await this.acessarPlanilha();
+  const folhaDeDados = info.worksheets[0];
+  const linhas = await promisify(folhaDeDados.getRows)({});
+  linhas.forEach((a,b) => {
+    a.linha = b + 1;
+  })
+  const response = linhas.filter(x => regexp.test(x.lacre) === true);
+
+  if (linhas.length === 0) {
+    sendJsonResponse(res, 200, [{ response: false }]);
+  } else {
+    sendJsonResponse(res, 200, response);
+  }
+};
+
+
