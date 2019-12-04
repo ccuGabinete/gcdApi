@@ -78,7 +78,6 @@ module.exports.buscarLacre = async (req, res, next) => {
   }
 };
 
-
 module.exports.atualizaCartorio = async (req, res, next) => {
   /*Esse método atualiza o lacre e o processo;
 
