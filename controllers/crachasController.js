@@ -2,7 +2,7 @@ var GoogleSpreadsheet = require("google-spreadsheet");
 const moment = require("../time");
 const { promisify } = require("util");
 const credentials = require("../credentials.json");
-const spreedsheetId = "1SfIWbNeGu63oqezhLNfBcgg20T8DQf1nSEoSyhaTlUw";
+const spreedsheetId = "1dFzvtT4ksPOXKpP2pgxuwirq1kgSxObl4uD-Wekx0a8";
 const doc = new GoogleSpreadsheet(spreedsheetId);
 
 var sendJsonResponse = function (res, status, content) {
@@ -49,15 +49,13 @@ module.exports.listar = async (req, res, next) => {
   const processo = req.body.processo;
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0]
-  const linhas = await promisify(folhaDeDados.getRows)({
-    query: 'processo = ' + processo
-  })
+  const linhas = await promisify(folhaDeDados.getRows)({})
 
-  if (linhas.length !== 'undefined' || linhas.length > 0) {
+  if(linhas.length !== 'undefined' || linhas.length > 0){
     res.json(linhas);;
-  } else {
+  }else{
     res.json([]);
   }
-
+  
 }
 

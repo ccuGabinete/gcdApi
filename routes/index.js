@@ -8,7 +8,8 @@ const aa = require('../controllers/AAController');
 const atd = require('../controllers/atendimentoController');
 const inst = require('../controllers/instituicaoController');
 const email = require('../controllers/emailController');
-const child = require('../controllers/criancasperdidascontroller')
+const child = require('../controllers/criancasperdidascontroller');
+const crachas = require('../controllers/crachasController');
 var mid = require('../asyncMiddleware');
 router.post('/acesso/validar', mid.asyncMiddleware(acesso.validarSenha))
 router.post('/acesso/atualizarSenha', mid.asyncMiddleware(acesso.atualizarSenha))
@@ -31,6 +32,7 @@ router.post('/gcd/instituicao/buscar', mid.asyncMiddleware(inst.buscar))
 router.post('/gcd/instituicao/atualizar', mid.asyncMiddleware(inst.atualizar))
 router.get('/gcd/criancas/:id', mid.asyncMiddleware(child.buscarId))
 router.get('/gcd/email/enviar', mid.asyncMiddleware(email.enviar))
+router.get('/crachas/listar', mid.asyncMiddleware(crachas.listar))
 
 module.exports = router
 

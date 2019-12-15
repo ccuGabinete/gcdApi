@@ -9,3 +9,4 @@ module.exports.gerarSenha = async (senha) => {
 module.exports.validarSenha = async (senha, hashSenha) => {
     return await promisify(bcrypt.compare)(senha, hashSenha)
 }
+
