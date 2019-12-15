@@ -33,6 +33,7 @@ router.post('/gcd/instituicao/atualizar', mid.asyncMiddleware(inst.atualizar))
 router.get('/gcd/criancas/:id', mid.asyncMiddleware(child.buscarId))
 router.get('/gcd/email/enviar', mid.asyncMiddleware(email.enviar))
 router.get('/crachas/listar', mid.asyncMiddleware(crachas.listar))
+router.post('/crachas/atualizar', mid.asyncMiddleware(crachas.atualizar))
 
 module.exports = router
 

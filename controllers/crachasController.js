@@ -20,29 +20,20 @@ module.exports.acessarPlanilha = async () => {
   }
 };
 
-module.exports.salvar = async (req, res, next) => {
-  /*
-        Esse método requer o um objeto atendimento
-        req.body: {
-            processo: string
-        }
+module.exports.atualizar = async (req, res, next) => {
+  console.log(req.body);
 
-        e retorna:
-        {
-            salvo: boolean
-        }
-    */
-
-  req.body.data = moment.time();
-
+  var linha = parseInt(req.body.id);
   const info = await this.acessarPlanilha();
   const folhaDeDados = info.worksheets[0];
-  const response = await promisify(folhaDeDados.addRow)(req.body);
-  if (response) {
-    sendJsonResponse(res, 200, { salvo: true });
-  } else {
-    sendJsonResponse(res, 200, { salvo: false });
-  }
+  const celLinhas = await promisify(folhaDeDados.getCells)({});
+  console.log(celLinhas[0]);
+  const pos = (linha * 5) + 4;
+  celLinhas[pos].value = req.body.entregue;
+  celLinhas[0].save();
+  folhaDeDados.bulkUpdateCells(celLinhas);
+
+  sendJsonResponse(res, 200, { pos: pos });
 };
 
 module.exports.listar = async (req, res, next) => {
@@ -51,11 +42,11 @@ module.exports.listar = async (req, res, next) => {
   const folhaDeDados = info.worksheets[0]
   const linhas = await promisify(folhaDeDados.getRows)({})
 
-  if(linhas.length !== 'undefined' || linhas.length > 0){
+  if (linhas.length !== 'undefined' || linhas.length > 0) {
     res.json(linhas);;
-  }else{
+  } else {
     res.json([]);
   }
-  
+
 }
 
